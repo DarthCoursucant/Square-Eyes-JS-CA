@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link type="text/css" rel="stylesheet" href="./cssfiles/stylesheet.css">
+    <meta charset="UTF-8">
+    <meta name="Shopping Cart" content="width=device-width, initial-scale=1.0">
+    <meta author="Ameila Bujar">
+    <title>Shopping Cart</title>
+</head>
+
+<body onload="load()">
+<!--Header Code-->
+<header>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-container">
+                <a href="index.html"><img src="./media/Logo.png" alt="Square Eyes Logo"></a>
+            </div>
+         </div>
+        <div class="header-right">
+            <div id="Contact" class="headerbutton">
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div id="about" class="headerbutton">
+                <a href="about.html">About Us</a>
+            </div>
+            <div id="Cart" class="headerbutton">
+                <a class="active" href="cart.html">Shopping Cart</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="flex-container-shopping around">
+    <div class="cartform">
+        <form action="successcart.html" class="checkoutform">
+            <div class="textcart">
+              <p><b>To Complete Your Purchase Please Fill All The Nesccary Infomration</b></p>
+            </div>
+            <ul>
+                <li>
+                    <label for="first-name">Enter Your First Name</label>
+                    <input type="text" id="cartfirstname" name="first-name">
+                </li>
+                <br>
+                <li>
+                    <label for="last-name">Enter Your Surname</label>
+                    <input type="text" id="cartlastname" name="last-name">
+                </li>
+                <br>
+                <li>
+                    <label for="address">Enter Your Address</label>
+                    <input type="text" id="adress" name="customeraddress">
+                </li>
+                <br>
+                <li>
+                    <label for="postcalcode">Enter Your Postal Code</label>
+                    <input type="text" id="postcalcode" name="customercode">
+                </li>
+                <br>
+                <li>
+                    <label for="mail">Enter Your Email</label>
+                    <input type="text" id="emailcart" name="email">
+                </li>
+                <br>
+                <li>
+                    <label for="cardnumber">Enter Your Card Number</label>
+                    <input type="cardnumber" id="card" name="card">
+                </li>
+                <br>
+                <li>
+                    <label for="exp">Exp Date</label>
+                    <input type="text" id="exp" name="exp">
+                </li>
+                <br>
+                <li>
+                    <label for="cvc">CVC</label>
+                    <input type="text" id="cvc" name="cvc">
+                </li>
+                <br>
+                <li class="formbutton">
+                    <a href="product/checkout.html" type="submit">Submit</a>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <div class="hero-image6">
+        <div class="hero-text6">
+            <p><b>Your Shopping Cart</b></p>
+            <ul id="films">
+               
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+     function getXmlHttpRequestObject() {
+    if (window.XMLHttpRequest) {
+        return new XMLHttpRequest();
+    }
+    else if(window.ActiveXObject) {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else {
+    }
+}
+
+        function load(){
+
+
+                
+    
+      console.log(`${key_data}: ${sessionStorage.getItem(key_data)}`);  
+     
+
+       
+        var req = getXmlHttpRequestObject(); // fuction to get xmlhttp object
+
+        var tot = 0;
+        ////////////////////////////////// ALL FILMS ////////////////////////////////////
+            let key_var = Object.keys(sessionStorage);  
+        for(var key_data of key_var) {  
+    if (req) {
+        req.onreadystatechange = function() {
+            
+            if (req.readyState == 4) { //data is retrieved from server
+                if (req.status == 200) { // which reprents ok status   
+                    const myJSON = JSON.parse(req.responseText); 
+                   var count = myJSON.meta.totalCount;
+                   var design='';
+                   for (var i = 0; i <count; i++) {
+                        if(myJSON.data[i].id==key_data){
+                            design+=`<li>
+                    <p>`+myJSON.data[i].title+`: <b>$`+myJSON.data[i].price+`</b></p>
+                </li>`;
+                tot = tot+myJSON.data[i].price;
+                        }
+
+                   }
+
+                   design+=`<li>
+                  <p><b>Total Sum To Pay: $`+tot+`</b></p>
+                </li>`;
+
+                   document.getElementById('films').innerHTML = design;
+                }
+                else { 
+                    alert("There was a problem while using XMLHTTP:\n");
+                }
+            }            
+        }   
+        var strURL = "https://v2.api.noroff.dev/square-eyes";
+        req.open("GET", strURL, true); //open url using get method, get_GrnBill.php
+        req.send(null);
+    }
+     }
+
+        ////////////////////////////////// ALL FILMS ////////////////////////////////////
+
+}
+</script>
+
+<!--Footer Code-->
+<footer>
+    <div class="footer"></div>
+</footer>
+
+</body>
+</html>
