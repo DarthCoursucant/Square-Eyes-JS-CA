@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link type="text/css" rel="stylesheet" href="./cssfiles/stylesheet.css">
+    <meta charset="UTF-8">
+    <meta name="Action Movies" content="width=device-width, initial-scale=1.0">
+    <meta author="Ameila Bujar">
+    <title>Comedy Movies</title>
+</head>
+
+<body onload="load()">
+<!-- Header Code-->
+<header>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-container">
+                <a href="index.html"><img src="./media/Logo.png" alt="Square Eyes Logo"></a>
+            </div>
+         </div>
+        <div class="header-right">
+            <div id="Contact" class="headerbutton">
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div id="about" class="headerbutton">
+                <a href="about.html">About Us</a>
+            </div>
+            <div id="Cart" class="headerbutton">
+                <a href="cart.html">Shopping Cart</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!--Page Title + Become A Member Button-->
+    <div id="pagetitle">
+        <h1>Comedy Movies</h1>
+        <!-- <div class="titlebutton"> -->
+            <!-- <a href="become.html">Become A Member</a> -->
+        <!-- </div> -->
+    </div>
+
+    <!--Movies Images + Descritpions + Buttons-->
+    <div class="flex-content wrap" id="films">
+
+    </div>
+
+    <!--Footer Code-->
+    <script type="text/javascript">
+
+        function getXmlHttpRequestObject() {
+    if (window.XMLHttpRequest) {
+        return new XMLHttpRequest();
+    }
+    else if(window.ActiveXObject) {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else {
+    }
+}
+
+        function load(){
+
+        var req = getXmlHttpRequestObject(); // fuction to get xmlhttp object
+
+
+        ////////////////////////////////// ALL FILMS ////////////////////////////////////
+    if (req) {
+        req.onreadystatechange = function() {
+            
+            if (req.readyState == 4) { //data is retrieved from server
+                if (req.status == 200) { // which reprents ok status   
+                    const myJSON = JSON.parse(req.responseText); 
+                   var count = myJSON.meta.totalCount;
+                   var design='';
+                   for (var i = 0; i <count; i++) {
+
+                        if(myJSON.data[i].genre=='Comedy'){
+                            
+                    design+=`<div class="bathsheba">
+        <img src="`+myJSON.data[i].image.url+`" alt="`+myJSON.data[i].image.alt+`">
+        <div class="text">
+            <p><b>`+myJSON.data[i].title+`</b><br> Realeased: `+myJSON.data[i].released+` <br> Audeince Score:  `+myJSON.data[i].rating+` <br> Price: $`+myJSON.data[i].price+`</p>
+            <div class="bodybuttons">
+                <a href="product/index.html?id=`+myJSON.data[i].id+`">View</a>
+            </div>
+        </div>
+    </div>`;
+                        }
+                   }
+
+                   document.getElementById('films').innerHTML = design;
+                }
+                else { 
+                    alert("There was a problem while using XMLHTTP:\n");
+                }
+            }            
+        }   
+        var strURL = "https://v2.api.noroff.dev/square-eyes";
+        req.open("GET", strURL, true); //open url using get method, get_GrnBill.php
+        req.send(null);
+    }
+
+        ////////////////////////////////// ALL FILMS ////////////////////////////////////
+
+}
+    </script>
+<footer>
+    <div class="footer"></div>
+</footer>
+
+</body>
+</html>
